@@ -32,6 +32,12 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   end
 end
 
+When /I check all of the ratings/ do
+  Movie.all_ratings.each do |rating|
+    step "I check \"ratings_#{rating}\""
+  end
+end
+
 Then /I should see movies with the following ratings: (.*)/ do |rating_list|
   rating_list.split(/, /).each do | rating |
     Movie.find_all_by_rating(rating).each do |movie|
@@ -47,3 +53,8 @@ Then /I should not see movies with the following ratings: (.*)/ do |rating_list|
     end
   end  
 end
+
+Then /I should see all of the movies/ do
+  movie_count = Movie.find(:all).count
+  page.has_css?("table#movies tr", :count => movie_count)
+end 
