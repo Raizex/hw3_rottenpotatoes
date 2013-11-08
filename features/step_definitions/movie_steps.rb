@@ -12,7 +12,7 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  regexp = /#{string1}.*#{string2}/m #  /m means match across newlines
+  regexp = /#{e1}.*#{e2}/m #  /m means match across newlines
   page.body.should =~ regexp
 end
 
@@ -38,6 +38,12 @@ When /I check all of the ratings/ do
   end
 end
 
+When /I check none of the ratings/ do
+  Movie.all_ratings.each do |rating|
+    step "I uncheck \"ratings_#{rating}\""
+  end
+end
+
 Then /I should see movies with the following ratings: (.*)/ do |rating_list|
   rating_list.split(/, /).each do | rating |
     Movie.find_all_by_rating(rating).each do |movie|
@@ -57,4 +63,8 @@ end
 Then /I should see all of the movies/ do
   movie_count = Movie.find(:all).count
   page.has_css?("table#movies tr", :count => movie_count)
-end 
+end
+
+Then /I should see none of the movies/ do
+  page.has_css?("table#movies tr", :count => 0)
+end
