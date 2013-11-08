@@ -35,11 +35,15 @@ end
 Then /I should see movies with the following ratings: (.*)/ do |rating_list|
   rating_list.split(/, /).each do | rating |
     Movie.find_all_by_rating(rating).each do |movie|
-      #if (nt) 
-      #  step "I should not see \"#{movie.title}\""
-      #else
-        step "I should see \"#{movie.title}\""
-      #end
+       step "I should see \"#{movie.title}\""
     end
   end
+end
+
+Then /I should not see movies with the following ratings: (.*)/ do |rating_list|
+  rating_list.split(/, /).each do | rating |
+    Movie.find_all_by_rating(rating).each do |movie|
+       step "I should not see \"#{movie.title}\""
+    end
+  end  
 end
